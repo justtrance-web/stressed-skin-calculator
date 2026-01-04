@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stressed Skin Diaphragm Calculator | BS 5950-9</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0f1a;
+            --bg-secondary: #111827;
+            --bg-card: #1a2234;
+            --bg-input: #0d1321;
+            --accent: #3b82f6;
+            --accent-glow: rgba(59, 130, 246, 0.3);
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border: #2a3548;
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent), #8b5cf6);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--text-primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .standards {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-secondary);
+        }
+
+        /* Main Layout */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--bg-input);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .card-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Input Groups */
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 120px 60px;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .label-symbol {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent);
+            font-size: 0.75rem;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 0.6rem 0.8rem;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            text-align: right;
+            transition: all 0.2s;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        input[type="number"]::-webkit-inner-spin-button {
+            opacity: 0.5;
+        }
+
+        .unit {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Results Section */
+        .results-panel {
+            position: sticky;
+            top: 2rem;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .result-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .result-unit {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-left: 0.25rem;
+        }
+
+        /* Big Result Card */
+        .result-big {
+            background: linear-gradient(135deg, var(--bg-input), var(--bg-card));
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .result-big.success {
+            border-color: var(--success);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), var(--bg-card));
+        }
+
+        .result-big.fail {
+            border-color: var(--danger);
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), var(--bg-card));
+        }
+
+        .result-big-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .result-big.success .result-big-value {
+            color: var(--success);
+        }
+
+        .result-big.fail .result-big-value {
+            color: var(--danger);
+        }
+
+        .result-big-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        .status-badge.success {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        .status-badge.fail {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+        }
+
+        /* Flexibility Breakdown */
+        .breakdown-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0.75rem;
+            background: var(--bg-input);
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+
+        .breakdown-label {
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .breakdown-value {
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Capacity Bar */
+        .capacity-bars {
+            margin-top: 1rem;
+        }
+
+        .capacity-bar-item {
+            margin-bottom: 0.75rem;
+        }
+
+        .capacity-bar-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.25rem;
+            font-size: 0.8rem;
+        }
+
+        .capacity-bar-label {
+            color: var(--text-secondary);
+        }
+
+        .capacity-bar-value {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-primary);
+        }
+
+        .capacity-bar-track {
+            height: 8px;
+            background: var(--bg-input);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .capacity-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .capacity-bar-fill.governing {
+            background: var(--accent);
+        }
+
+        .capacity-bar-fill.secondary {
+            background: var(--text-muted);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            cursor: help;
+        }
+
+        .tooltip::after {
+            content: attr(data-tip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            z-index: 10;
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
+        }
+
+        /* Language Switcher */
+        .lang-switcher {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            z-index: 100;
+        }
+
+        .lang-btn {
+            padding: 0.4rem 0.8rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+
+        .lang-btn:hover, .lang-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        /* Print styles */
+        @media print {
+            body { background: white; color: black; }
+            .card { border: 1px solid #ccc; }
+            .lang-switcher { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="lang-switcher">
+        <button class="lang-btn active" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" onclick="setLang('ru')">RU</button>
+        <button class="lang-btn" onclick="setLang('de')">DE</button>
+        <button class="lang-btn" onclick="setLang('es')">ES</button>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">◈</div>
+                <div>
+                    <h1 data-i18n="title">Stressed Skin Diaphragm Calculator</h1>
+                    <p class="subtitle" data-i18n="subtitle">Professional structural engineering tool</p>
+                </div>
+            </div>
+            <div class="standards">
+                <span class="badge">BS 5950-9:1994</span>
+                <span class="badge">EN 1993-1-3:2006</span>
+                <span class="badge">ECCS Recommendations</span>
+            </div>
+        </header>
+
+        <div class="main-grid">
+            <!-- INPUT SECTION -->
+            <div class="input-panel">
+                <!-- Building Geometry -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📐</div>
+                        <div>
+                            <div class="card-title" data-i18n="geometry">Building Geometry</div>
+                            <div class="card-subtitle" data-i18n="geometry_sub">Frame and building dimensions</div>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="input-row">
+                            <label data-i18n="frame_spacing">Frame spacing <span class="label-symbol">(a)</span></label>
+                            <input type="number" id="a" value="6000" step="100" onchange="calculate()">
+                            <span class="unit">mm</span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="input-row">
+                            <label data-i18n="building_width">Building width <span class="label-symbol">(b)</span></label>
+                            <input type="number" id="b" value="20000" step="1000" onchange="calculate()">
+                            <span class="unit">mm</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sheeting Properties -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🔩</div>
+                        <div>
+                            <div class="card-title" data-i18n="sheeting">Sheeting Properties</div>
+                            <div class="card-subtitle" data-i18n="sheeting_sub">Profile and material data</div>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="input-row">
+                            <label data-i18n="profile_depth">Profile depth <span class="label-symbol">(d)</span></label>
+                            <input type="number" id="d" value="32" step="1" onchange="calculate()">
+                            <span class="unit">mm</span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="input-row">
+                            <label data-i18n="thickness">Sheet thickness <span class="label-symbol">(t)</span></label>
+                            <input type="number" id="t" value="0.7" step="0.1" onchange="calculate()">
+                            <span class="unit">mm</span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="input-row">
+                            <label data-i18n="pitch">Corrugation pitch <span class="label-symbol">(p)</span></label>
+                            <input type="number" id="p" value="200" step="10" onchange="calculate()">
+                            <span class="unit">mm</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Purlin Properties -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">⊥</div>
+                        <div>
+                            <div class="card-title" data-i18n="purlins">Purlin Properties</div>
+                            <div class="card-subtitle" data-i18n="purlins_sub">Secondary steelwork</div>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="input-row">
+                            <label data-i18n="purlin_spacing">Purlin spacing <span class="label-symbol">(sp)</span></label>
+                            <input type="number" id="sp" value="1800" step="100" onchange="calculate()">
+                            <span class="unit">mm</span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="input-row">
+                            <label data-i18n="num_purlins">Number of purlins <span class="label-symbol">(np)</span></label>
+                            <input type="number" id="np" value="12" step="1" onchange="calculate()">
+                            <span class="unit">-</span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="input-row">
+                            <label data-i18n="purlin_area">Purlin area <span class="label-symbol">(Ap)</span></label>
+                            <input type="number" id="Ap" value="850" step="50" onchange="calculate()">
+                            <span class="unit">mm²</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fastener Properties -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">⚙️</div>
+                        <div>
+                            <div class="card-title" data-i18n="fasteners">Fastener Properties</div>
+                            <div class="card-subtitle" data-i18n="fasteners_sub">Connection details</div>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="input-row">
+                            <label data-i18n="seam_spacing">Seam fastener spacing <span class="label-symbol">(ss)</span></label>
+                            <input type="number" id="ss" value="300" step="50" onchange="calculate()">
+                            <span class="unit">mm</span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="input-row">
+                            <label data-i18n="seam_strength">Seam fastener strength <span class="label-symbol">(Fs)</span></label>
+                            <input type="number" id="Fs" value="3.5" step="0.1" onchange="calculate()">
+                            <span class="unit">kN</span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="input-row">
+                            <label data-i18n="num_seams">Number of seams <span class="label-symbol">(ns)</span></label>
+                            <input type="number" id="ns" value="20" step="1" onchange="calculate()">
+                            <span class="unit">-</span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="input-row">
+                            <label data-i18n="purlin_strength">Purlin fastener strength <span class="label-symbol">(Fp)</span></label>
+                            <input type="number" id="Fp" value="4.2" step="0.1" onchange="calculate()">
+                            <span class="unit">kN</span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="input-row">
+                            <label data-i18n="fasteners_per_purlin">Fasteners per purlin <span class="label-symbol">(nf)</span></label>
+                            <input type="number" id="nf" value="2" step="1" onchange="calculate()">
+                            <span class="unit">-</span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="input-row">
+                            <label data-i18n="seam_flex">Seam flexibility <span class="label-symbol">(fs)</span></label>
+                            <input type="number" id="fs" value="0.15" step="0.01" onchange="calculate()">
+                            <span class="unit">mm/kN</span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="input-row">
+                            <label data-i18n="purlin_flex">Purlin flex. <span class="label-symbol">(fp)</span></label>
+                            <input type="number" id="fp" value="0.10" step="0.01" onchange="calculate()">
+                            <span class="unit">mm/kN</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Design Load -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">⚡</div>
+                        <div>
+                            <div class="card-title" data-i18n="design_load">Design Load</div>
+                            <div class="card-subtitle" data-i18n="design_load_sub">Applied shear force</div>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="input-row">
+                            <label data-i18n="applied_shear">Applied shear <span class="label-symbol">(V)</span></label>
+                            <input type="number" id="V" value="10" step="1" onchange="calculate()">
+                            <span class="unit">kN/m</span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="input-row">
+                            <label data-i18n="safety_factor">Safety factor <span class="label-symbol">(γM)</span></label>
+                            <input type="number" id="gamma" value="1.0" step="0.05" onchange="calculate()">
+                            <span class="unit">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RESULTS SECTION -->
+            <div class="results-panel">
+                <!-- Status Card -->
+                <div class="card result-big" id="status-card">
+                    <div class="result-big-value" id="utilisation">--%</div>
+                    <div class="result-big-label" data-i18n="utilisation">Utilisation Ratio</div>
+                    <div class="status-badge" id="status-badge">
+                        <span id="status-icon">●</span>
+                        <span id="status-text" data-i18n="calculating">Calculating...</span>
+                    </div>
+                </div>
+
+                <!-- Governing Capacity -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🎯</div>
+                        <div>
+                            <div class="card-title" data-i18n="governing">Governing Capacity</div>
+                        </div>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label" data-i18n="design_capacity">Design capacity</span>
+                        <span class="result-value"><span id="Vd">--</span><span class="result-unit">kN/m</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label" data-i18n="failure_mode">Failure mode</span>
+                        <span class="result-value" id="failure-mode">--</span>
+                    </div>
+
+                    <div class="capacity-bars">
+                        <div class="capacity-bar-item">
+                            <div class="capacity-bar-header">
+                                <span class="capacity-bar-label">Vs <span data-i18n="seam_cap">(Seam)</span></span>
+                                <span class="capacity-bar-value" id="Vs-val">-- kN/m</span>
+                            </div>
+                            <div class="capacity-bar-track">
+                                <div class="capacity-bar-fill" id="Vs-bar"></div>
+                            </div>
+                        </div>
+                        <div class="capacity-bar-item">
+                            <div class="capacity-bar-header">
+                                <span class="capacity-bar-label">Vp <span data-i18n="purlin_cap">(Purlin)</span></span>
+                                <span class="capacity-bar-value" id="Vp-val">-- kN/m</span>
+                            </div>
+                            <div class="capacity-bar-track">
+                                <div class="capacity-bar-fill" id="Vp-bar"></div>
+                            </div>
+                        </div>
+                        <div class="capacity-bar-item">
+                            <div class="capacity-bar-header">
+                                <span class="capacity-bar-label">Vb <span data-i18n="buckling_cap">(Buckling)</span></span>
+                                <span class="capacity-bar-value" id="Vb-val">-- kN/m</span>
+                            </div>
+                            <div class="capacity-bar-track">
+                                <div class="capacity-bar-fill" id="Vb-bar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stiffness Results -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📊</div>
+                        <div>
+                            <div class="card-title" data-i18n="stiffness">Diaphragm Stiffness</div>
+                        </div>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label" data-i18n="total_flex">Total flexibility (c)</span>
+                        <span class="result-value"><span id="c-total">--</span><span class="result-unit">mm/kN</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label" data-i18n="shear_stiff">Shear stiffness (S)</span>
+                        <span class="result-value"><span id="S-total">--</span><span class="result-unit">kN/mm</span></span>
+                    </div>
+
+                    <div style="margin-top: 1rem;">
+                        <div class="card-subtitle" style="margin-bottom: 0.5rem;" data-i18n="flex_breakdown">Flexibility breakdown:</div>
+                        <div class="breakdown-grid">
+                            <div class="breakdown-item"><span class="breakdown-label">c1.1</span><span class="breakdown-value" id="c11">--</span></div>
+                            <div class="breakdown-item"><span class="breakdown-label">c1.2</span><span class="breakdown-value" id="c12">--</span></div>
+                            <div class="breakdown-item"><span class="breakdown-label">c1.3</span><span class="breakdown-value" id="c13">--</span></div>
+                            <div class="breakdown-item"><span class="breakdown-label">c2.1</span><span class="breakdown-value" id="c21">--</span></div>
+                            <div class="breakdown-item"><span class="breakdown-label">c2.2</span><span class="breakdown-value" id="c22">--</span></div>
+                            <div class="breakdown-item"><span class="breakdown-label">c3</span><span class="breakdown-value" id="c3">--</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- References -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📚</div>
+                        <div>
+                            <div class="card-title" data-i18n="references">References</div>
+                        </div>
+                    </div>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.8;">
+                        BS 5950-9:1994<br>
+                        EN 1993-1-3:2006<br>
+                        ECCS Recommendations (1995)<br>
+                        Davies & Bryan (1982)
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p data-i18n="footer">Free online calculator for structural engineers</p>
+            <p style="margin-top: 0.5rem;">© 2026 · <a href="#">artvision.ru</a></p>
+        </footer>
+    </div>
+
+    <script>
+        // Translations
+        const translations = {
+            en: {
+                title: "Stressed Skin Diaphragm Calculator",
+                subtitle: "Professional structural engineering tool",
+                geometry: "Building Geometry",
+                geometry_sub: "Frame and building dimensions",
+                frame_spacing: "Frame spacing",
+                building_width: "Building width",
+                sheeting: "Sheeting Properties",
+                sheeting_sub: "Profile and material data",
+                profile_depth: "Profile depth",
+                thickness: "Sheet thickness",
+                pitch: "Corrugation pitch",
+                purlins: "Purlin Properties",
+                purlins_sub: "Secondary steelwork",
+                purlin_spacing: "Purlin spacing",
+                num_purlins: "Number of purlins",
+                purlin_area: "Purlin area",
+                fasteners: "Fastener Properties",
+                fasteners_sub: "Connection details",
+                seam_spacing: "Seam fastener spacing",
+                seam_strength: "Seam fastener strength",
+                num_seams: "Number of seams",
+                purlin_strength: "Purlin fastener strength",
+                fasteners_per_purlin: "Fasteners per purlin",
+                seam_flex: "Seam flexibility",
+                purlin_flex: "Purlin flexibility",
+                design_load: "Design Load",
+                design_load_sub: "Applied shear force",
+                applied_shear: "Applied shear",
+                safety_factor: "Safety factor",
+                utilisation: "Utilisation Ratio",
+                calculating: "Calculating...",
+                ok: "OK — Design satisfactory",
+                fail: "FAIL — Increase capacity",
+                governing: "Governing Capacity",
+                design_capacity: "Design capacity",
+                failure_mode: "Failure mode",
+                seam_cap: "(Seam)",
+                purlin_cap: "(Purlin)",
+                buckling_cap: "(Buckling)",
+                stiffness: "Diaphragm Stiffness",
+                total_flex: "Total flexibility (c)",
+                shear_stiff: "Shear stiffness (S)",
+                flex_breakdown: "Flexibility breakdown:",
+                references: "References",
+                footer: "Free online calculator for structural engineers",
+                seam_fasteners: "Seam fasteners",
+                purlin_fasteners: "Purlin fasteners",
+                sheet_buckling: "Sheet buckling"
+            },
+            ru: {
+                title: "Калькулятор диафрагмы stressed skin",
+                subtitle: "Профессиональный инженерный инструмент",
+                geometry: "Геометрия здания",
+                geometry_sub: "Размеры рам и здания",
+                frame_spacing: "Шаг рам",
+                building_width: "Ширина здания",
+                sheeting: "Свойства профнастила",
+                sheeting_sub: "Параметры профиля и материала",
+                profile_depth: "Высота профиля",
+                thickness: "Толщина листа",
+                pitch: "Шаг гофр",
+                purlins: "Свойства прогонов",
+                purlins_sub: "Вторичные конструкции",
+                purlin_spacing: "Шаг прогонов",
+                num_purlins: "Количество прогонов",
+                purlin_area: "Площадь прогона",
+                fasteners: "Свойства крепежа",
+                fasteners_sub: "Детали соединений",
+                seam_spacing: "Шаг шовного крепежа",
+                seam_strength: "Прочность шовного крепежа",
+                num_seams: "Количество швов",
+                purlin_strength: "Прочность крепежа к прогону",
+                fasteners_per_purlin: "Крепёж на прогон",
+                seam_flex: "Податливость шва",
+                purlin_flex: "Податливость прогона",
+                design_load: "Расчётная нагрузка",
+                design_load_sub: "Приложенная сдвигающая сила",
+                applied_shear: "Приложенный сдвиг",
+                safety_factor: "Коэффициент надёжности",
+                utilisation: "Коэффициент использования",
+                calculating: "Расчёт...",
+                ok: "OK — Расчёт выполнен",
+                fail: "НЕ ПРОХОДИТ — Увеличьте несущую способность",
+                governing: "Определяющая несущая способность",
+                design_capacity: "Расчётная несущая способность",
+                failure_mode: "Режим отказа",
+                seam_cap: "(Шов)",
+                purlin_cap: "(Прогон)",
+                buckling_cap: "(Потеря устойчивости)",
+                stiffness: "Жёсткость диафрагмы",
+                total_flex: "Общая податливость (c)",
+                shear_stiff: "Сдвиговая жёсткость (S)",
+                flex_breakdown: "Составляющие податливости:",
+                references: "Литература",
+                footer: "Бесплатный онлайн калькулятор для инженеров",
+                seam_fasteners: "Шовный крепёж",
+                purlin_fasteners: "Крепёж к прогонам",
+                sheet_buckling: "Потеря устойчивости листа"
+            },
+            de: {
+                title: "Schubfeldberechnung",
+                subtitle: "Professionelles Statik-Werkzeug",
+                geometry: "Gebäudegeometrie",
+                geometry_sub: "Rahmen- und Gebäudeabmessungen",
+                frame_spacing: "Rahmenabstand",
+                building_width: "Gebäudebreite",
+                sheeting: "Profil­eigenschaften",
+                sheeting_sub: "Profil- und Materialdaten",
+                profile_depth: "Profilhöhe",
+                thickness: "Blechdicke",
+                pitch: "Wellenteilung",
+                purlins: "Pfetten­eigenschaften",
+                purlins_sub: "Sekundärkonstruktion",
+                purlin_spacing: "Pfettenabstand",
+                num_purlins: "Anzahl Pfetten",
+                purlin_area: "Pfettenquerschnitt",
+                fasteners: "Verbindungs­mittel",
+                fasteners_sub: "Anschlussdetails",
+                seam_spacing: "Längsnahtabstand",
+                seam_strength: "Längsnah­ttragfähigkeit",
+                num_seams: "Anzahl Nähte",
+                purlin_strength: "Pfetten­verbindung",
+                fasteners_per_purlin: "Verbinder pro Pfette",
+                seam_flex: "Naht­nachgiebigkeit",
+                purlin_flex: "Pfetten­nachgiebigkeit",
+                design_load: "Bemessungslast",
+                design_load_sub: "Einwirkende Schubkraft",
+                applied_shear: "Einwirkender Schub",
+                safety_factor: "Teilsicherheitsbeiwert",
+                utilisation: "Ausnutzungsgrad",
+                calculating: "Berechnung...",
+                ok: "OK — Nachweis erfüllt",
+                fail: "NICHT OK — Tragfähigkeit erhöhen",
+                governing: "Maßgebende Tragfähigkeit",
+                design_capacity: "Bemessungstragfähigkeit",
+                failure_mode: "Versagensart",
+                seam_cap: "(Naht)",
+                purlin_cap: "(Pfette)",
+                buckling_cap: "(Beulen)",
+                stiffness: "Schubfeldsteifigkeit",
+                total_flex: "Gesamtnachgiebigkeit (c)",
+                shear_stiff: "Schubsteifigkeit (S)",
+                flex_breakdown: "Nachgiebigkeitsanteile:",
+                references: "Literatur",
+                footer: "Kostenloser Online-Rechner für Tragwerksplaner",
+                seam_fasteners: "Längsnaht",
+                purlin_fasteners: "Pfettenverbindung",
+                sheet_buckling: "Blechbeulen"
+            },
+            es: {
+                title: "Calculadora de Diafragma",
+                subtitle: "Herramienta profesional de ingeniería estructural",
+                geometry: "Geometría del Edificio",
+                geometry_sub: "Dimensiones de pórticos y edificio",
+                frame_spacing: "Separación de pórticos",
+                building_width: "Ancho del edificio",
+                sheeting: "Propiedades de Chapa",
+                sheeting_sub: "Datos de perfil y material",
+                profile_depth: "Altura del perfil",
+                thickness: "Espesor de chapa",
+                pitch: "Paso de ondulación",
+                purlins: "Propiedades de Correas",
+                purlins_sub: "Estructura secundaria",
+                purlin_spacing: "Separación de correas",
+                num_purlins: "Número de correas",
+                purlin_area: "Área de correa",
+                fasteners: "Propiedades de Fijaciones",
+                fasteners_sub: "Detalles de conexión",
+                seam_spacing: "Separación de fijaciones de junta",
+                seam_strength: "Resistencia de fijación de junta",
+                num_seams: "Número de juntas",
+                purlin_strength: "Resistencia fijación a correa",
+                fasteners_per_purlin: "Fijaciones por correa",
+                seam_flex: "Flexibilidad de junta",
+                purlin_flex: "Flexibilidad de correa",
+                design_load: "Carga de Diseño",
+                design_load_sub: "Fuerza cortante aplicada",
+                applied_shear: "Cortante aplicado",
+                safety_factor: "Factor de seguridad",
+                utilisation: "Ratio de Utilización",
+                calculating: "Calculando...",
+                ok: "OK — Diseño satisfactorio",
+                fail: "FALLO — Aumentar capacidad",
+                governing: "Capacidad Determinante",
+                design_capacity: "Capacidad de diseño",
+                failure_mode: "Modo de fallo",
+                seam_cap: "(Junta)",
+                purlin_cap: "(Correa)",
+                buckling_cap: "(Pandeo)",
+                stiffness: "Rigidez del Diafragma",
+                total_flex: "Flexibilidad total (c)",
+                shear_stiff: "Rigidez a cortante (S)",
+                flex_breakdown: "Desglose de flexibilidad:",
+                references: "Referencias",
+                footer: "Calculadora online gratuita para ingenieros estructurales",
+                seam_fasteners: "Fijaciones de junta",
+                purlin_fasteners: "Fijaciones de correa",
+                sheet_buckling: "Pandeo de chapa"
+            }
+        };
+
+        let currentLang = 'en';
+
+        function setLang(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent === lang.toUpperCase());
+            });
+            
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    // Preserve any child elements (like spans with symbols)
+                    const symbol = el.querySelector('.label-symbol');
+                    if (symbol) {
+                        el.innerHTML = translations[lang][key] + ' ' + symbol.outerHTML;
+                    } else {
+                        el.textContent = translations[lang][key];
+                    }
+                }
+            });
+            
+            calculate(); // Recalculate to update failure mode text
+        }
+
+        function getVal(id) {
+            return parseFloat(document.getElementById(id).value) || 0;
+        }
+
+        function calculate() {
+            // Get inputs
+            const a = getVal('a');      // Frame spacing (mm)
+            const b = getVal('b');      // Building width (mm)
+            const d = getVal('d');      // Profile depth (mm)
+            const t = getVal('t');      // Sheet thickness (mm)
+            const p = getVal('p');      // Pitch (mm)
+            const sp = getVal('sp');    // Purlin spacing (mm)
+            const np = getVal('np');    // Number of purlins
+            const Ap = getVal('Ap');    // Purlin area (mm²)
+            const ss = getVal('ss');    // Seam fastener spacing (mm)
+            const Fs = getVal('Fs');    // Seam fastener strength (kN)
+            const ns = getVal('ns');    // Number of seams
+            const Fp = getVal('Fp');    // Purlin fastener strength (kN)
+            const nf = getVal('nf');    // Fasteners per purlin
+            const fs = getVal('fs');    // Seam flexibility (mm/kN)
+            const fp = getVal('fp');    // Purlin flexibility (mm/kN)
+            const V = getVal('V');      // Applied shear (kN/m)
+            const gamma = getVal('gamma'); // Safety factor
+
+            const E = 210000; // Steel modulus (N/mm²)
+            const alpha1 = 0.0025;
+            const alpha2 = 0.0015;
+            const alpha3 = 0.0005;
+            const K = 5.0;
+
+            // Flexibility calculations (mm/kN)
+            const c11 = alpha1 * a * d / (sp * Math.pow(t, 3));
+            const c12 = alpha2 * a * K * Math.pow(p, 2) / (E * Math.pow(t, 3) * b);
+            const c13 = 2 * alpha3 * a / (E * t * b);
+            const c21 = 2 * sp * a * fs / (p * ss);
+            const c22 = 2 * a * fp / (nf * np);
+            const c3 = 0.5 * np * sp * Math.pow(a, 2) / (E * Ap * Math.pow(b, 2));
+
+            const cTotal = c11 + c12 + c13 + c21 + c22 + c3;
+            const S = cTotal > 0 ? 1 / cTotal : 0;
+
+            // Capacity calculations (kN/m)
+            const Vs = Fs * ns / ss * 1000;
+            const Vp = Fp * nf * np / (2 * a) * 1000;
+            const Vb = 50 * t * b / 1000; // Simplified buckling
+
+            const Vmin = Math.min(Vs, Vp, Vb);
+            const Vd = Vmin / gamma;
+            const utilisation = V / Vd;
+
+            // Determine failure mode
+            let failureMode;
+            let failureModeKey;
+            if (Vs <= Vp && Vs <= Vb) {
+                failureModeKey = 'seam_fasteners';
+            } else if (Vp <= Vs && Vp <= Vb) {
+                failureModeKey = 'purlin_fasteners';
+            } else {
+                failureModeKey = 'sheet_buckling';
+            }
+            failureMode = translations[currentLang][failureModeKey] || failureModeKey;
+
+            // Update display
+            document.getElementById('c11').textContent = c11.toFixed(3);
+            document.getElementById('c12').textContent = c12.toFixed(3);
+            document.getElementById('c13').textContent = c13.toFixed(3);
+            document.getElementById('c21').textContent = c21.toFixed(3);
+            document.getElementById('c22').textContent = c22.toFixed(3);
+            document.getElementById('c3').textContent = c3.toFixed(3);
+            document.getElementById('c-total').textContent = cTotal.toFixed(3);
+            document.getElementById('S-total').textContent = S.toFixed(4);
+
+            document.getElementById('Vs-val').textContent = Vs.toFixed(1) + ' kN/m';
+            document.getElementById('Vp-val').textContent = Vp.toFixed(1) + ' kN/m';
+            document.getElementById('Vb-val').textContent = Vb.toFixed(1) + ' kN/m';
+
+            document.getElementById('Vd').textContent = Vd.toFixed(1);
+            document.getElementById('failure-mode').textContent = failureMode;
+            document.getElementById('utilisation').textContent = (utilisation * 100).toFixed(0) + '%';
+
+            // Update capacity bars
+            const maxCap = Math.max(Vs, Vp, Vb);
+            const VsBar = document.getElementById('Vs-bar');
+            const VpBar = document.getElementById('Vp-bar');
+            const VbBar = document.getElementById('Vb-bar');
+
+            VsBar.style.width = (Vs / maxCap * 100) + '%';
+            VpBar.style.width = (Vp / maxCap * 100) + '%';
+            VbBar.style.width = (Vb / maxCap * 100) + '%';
+
+            VsBar.className = 'capacity-bar-fill ' + (Vs === Vmin ? 'governing' : 'secondary');
+            VpBar.className = 'capacity-bar-fill ' + (Vp === Vmin ? 'governing' : 'secondary');
+            VbBar.className = 'capacity-bar-fill ' + (Vb === Vmin ? 'governing' : 'secondary');
+
+            // Update status
+            const statusCard = document.getElementById('status-card');
+            const statusBadge = document.getElementById('status-badge');
+            const statusIcon = document.getElementById('status-icon');
+            const statusText = document.getElementById('status-text');
+
+            if (utilisation <= 1) {
+                statusCard.className = 'card result-big success';
+                statusBadge.className = 'status-badge success';
+                statusIcon.textContent = '✓';
+                statusText.textContent = translations[currentLang]['ok'];
+            } else {
+                statusCard.className = 'card result-big fail';
+                statusBadge.className = 'status-badge fail';
+                statusIcon.textContent = '✗';
+                statusText.textContent = translations[currentLang]['fail'];
+            }
+        }
+
+        // Initial calculation
+        calculate();
+    </script>
+</body>
+</html>
