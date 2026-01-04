@@ -1,0 +1,8 @@
+{
+  "name": "stressed-skin-calculator",
+  "version": "1.0.0",
+  "description": "BS 5950-9 Stressed Skin Diaphragm Calculator",
+  "scripts": {
+    "start": "npx serve public"
+  }
+}
